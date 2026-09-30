@@ -1,0 +1,17 @@
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{
+  "code": "JAVAX-DDD",
+  "title": "Domain Driven Design",
+  "limit": 5
+}
+
+### Enroll
+PUT http://localhost:8080/api/courses/1/enrollments
+Content-Type: application/json
+
+{
+  "courseId": 1,
+  "employeeId": 16
+}

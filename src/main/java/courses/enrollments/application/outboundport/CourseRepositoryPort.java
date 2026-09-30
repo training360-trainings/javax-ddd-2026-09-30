@@ -2,9 +2,11 @@ package courses.enrollments.application.outboundport;
 
 import courses.enrollments.domain.enrollments.Course;
 
-public interface CourseRepository {
+import java.util.Optional;
+
+public interface CourseRepositoryPort {
 
     Course save(Course course);
 
-    Course findById(long id);
+    Optional<Course> findById(long id);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Course {
 
     private Long id;

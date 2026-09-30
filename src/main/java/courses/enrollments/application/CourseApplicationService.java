@@ -1,11 +1,10 @@
 package courses.enrollments.application;
 
 import courses.enrollments.application.inboundport.*;
-import courses.enrollments.application.outboundport.CourseRepository;
+import courses.enrollments.application.outboundport.CourseRepositoryPort;
 import courses.enrollments.domain.enrollments.Course;
 import courses.enrollments.domain.enrollments.CourseCode;
 import courses.enrollments.domain.enrollments.EmployeeId;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CourseApplicationService implements CourseApplicationServicePort {
 
-    private final CourseRepository courseRepository;
+    private final CourseRepositoryPort courseRepository;
 
     @Override
     public CourseDto announce(AnnounceCommand command) {
@@ -25,7 +24,8 @@ public class CourseApplicationService implements CourseApplicationServicePort {
 
     @Override
     public EnrollmentDto enroll(EnrollCommand enrollCommand) {
-        var course = courseRepository.findById(enrollCommand.courseId());
+        var course = courseRepository.findById(enrollCommand.courseId())
+                .orElseThrow(() -> new IllegalArgumentException("Course not found " + enrollCommand.courseId()));
         var enrollment = course.enroll(new EmployeeId(enrollCommand.employeeId()));
         courseRepository.save(course);
         return new EnrollmentDto(enrollment.employeeId().value(), enrollment.enrollmentDate());
