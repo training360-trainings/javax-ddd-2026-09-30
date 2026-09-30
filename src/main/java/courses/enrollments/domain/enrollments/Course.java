@@ -33,15 +33,18 @@ public class Course {
         return new Course(null, courseCode, title, limit, new ArrayList<>());
     }
 
-    public void enroll(EmployeeId employeeId) {
+    public Enrollment enroll(EmployeeId employeeId) {
         Objects.requireNonNull(employeeId);
-        if (enrollments.stream().anyMatch(e -> e.employeeId().equals(employeeId))) {
-            return;
+        var found = enrollments.stream().filter(e -> e.employeeId().equals(employeeId)).findAny();
+        if (found.isPresent()) {
+            return found.get();
         }
         if (limit <= enrollments.size()) {
             throw new IllegalArgumentException("Already full");
         }
-        enrollments.add(new Enrollment(employeeId, LocalDate.now()));
+        var enrollment = new Enrollment(employeeId, LocalDate.now());
+        enrollments.add(enrollment);
+        return enrollment;
     }
 
 }
