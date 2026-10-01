@@ -3,6 +3,9 @@ package courses.enrollments.application;
 import courses.enrollments.application.inboundport.*;
 import courses.enrollments.application.outboundport.CourseRepositoryPort;
 import courses.enrollments.application.outboundport.EmployeeGatewayPort;
+import courses.enrollments.application.usecase.AnnounceUseCase;
+import courses.enrollments.application.usecase.CancelAllForEmployeeUseCase;
+import courses.enrollments.application.usecase.EnrollUseCase;
 import courses.enrollments.domain.enrollments.Course;
 import courses.enrollments.domain.enrollments.CourseCode;
 import courses.enrollments.domain.enrollments.EmployeeId;
@@ -14,39 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CourseApplicationService implements CourseApplicationServicePort {
 
-    private final CourseRepositoryPort courseRepository;
+    private final AnnounceUseCase announceUseCase;
 
-    private final EmployeeGatewayPort employeeGateway;
+    private final EnrollUseCase enrollUseCase;
+
+    private final CancelAllForEmployeeUseCase cancelAllForEmployeeUseCase;
 
     @Override
     public CourseDto announce(AnnounceCommand command) {
-        var course = Course.announce(new CourseCode(command.code()), command.title(), command.limit());
-        course = courseRepository.save(course);
-        return new CourseDto(course.getId(), course.getCourseCode().value(),
-                course.getTitle(), course.getLimit());
+        return announceUseCase.announce(command);
     }
 
     @Override
     public EnrollmentDto enroll(EnrollCommand enrollCommand) {
-        var id = new EmployeeId(enrollCommand.employeeId());
-        if (employeeGateway.employeeHasNotJoined(id)) {
-            throw new IllegalArgumentException("Employee with id %d does not joined".formatted(id.value()));
-        }
-        var course = courseRepository.findById(enrollCommand.courseId())
-                .orElseThrow(() -> new IllegalArgumentException("Course not found " + enrollCommand.courseId()));
-        var enrollment = course.enroll(id);
-        courseRepository.save(course);
-        return new EnrollmentDto(enrollment.employeeId().value(), enrollment.enrollmentDate());
+        return enrollUseCase.enroll(enrollCommand);
     }
 
     @Override
     @Transactional
     public void cancelAllForEmployee(long employeeId) {
-        var courses = courseRepository.findAllWithEnrolledEmployee(employeeId);
-        var cancelAll = new CancelAllDomainService(courses);
-        cancelAll.cancelAll(new EmployeeId(employeeId));
-        for (var course : courses) {
-            courseRepository.save(course);
-        }
+        cancelAllForEmployeeUseCase.cancelAllForEmployee(employeeId);
     }
 }
