@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeService implements EmployeeHostGateway {
 
     private final EmployeeRepository employeeRepository;
 
@@ -25,5 +25,10 @@ public class EmployeeService {
     public EmployeeDto findById(long id) {
         return employeeRepository.findDtoById(id, EmployeeDto.class)
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found with id " + id));
+    }
+
+    @Override
+    public boolean hasJoined(long employeeId) {
+        return employeeRepository.existsById(employeeId);
     }
 }

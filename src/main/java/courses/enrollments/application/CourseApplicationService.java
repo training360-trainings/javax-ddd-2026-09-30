@@ -2,6 +2,7 @@ package courses.enrollments.application;
 
 import courses.enrollments.application.inboundport.*;
 import courses.enrollments.application.outboundport.CourseRepositoryPort;
+import courses.enrollments.application.outboundport.EmployeeGatewayPort;
 import courses.enrollments.domain.enrollments.Course;
 import courses.enrollments.domain.enrollments.CourseCode;
 import courses.enrollments.domain.enrollments.EmployeeId;
@@ -14,6 +15,8 @@ public class CourseApplicationService implements CourseApplicationServicePort {
 
     private final CourseRepositoryPort courseRepository;
 
+    private final EmployeeGatewayPort employeeGateway;
+
     @Override
     public CourseDto announce(AnnounceCommand command) {
         var course = Course.announce(new CourseCode(command.code()), command.title(), command.limit());
@@ -24,9 +27,13 @@ public class CourseApplicationService implements CourseApplicationServicePort {
 
     @Override
     public EnrollmentDto enroll(EnrollCommand enrollCommand) {
+        var id = new EmployeeId(enrollCommand.employeeId());
+        if (employeeGateway.employeeHasNotJoined(id)) {
+            throw new IllegalArgumentException("Employee with id %d does not joined".formatted(id.value()));
+        }
         var course = courseRepository.findById(enrollCommand.courseId())
                 .orElseThrow(() -> new IllegalArgumentException("Course not found " + enrollCommand.courseId()));
-        var enrollment = course.enroll(new EmployeeId(enrollCommand.employeeId()));
+        var enrollment = course.enroll(id);
         courseRepository.save(course);
         return new EnrollmentDto(enrollment.employeeId().value(), enrollment.enrollmentDate());
     }
