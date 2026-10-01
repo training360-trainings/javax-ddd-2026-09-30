@@ -1,10 +1,11 @@
-package courses.employees;
+package courses.employees.internal;
 
+import courses.employees.EmployeeDto;
+import courses.employees.EmployeeHostGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

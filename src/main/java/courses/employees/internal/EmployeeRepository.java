@@ -1,4 +1,4 @@
-package courses.employees;
+package courses.employees.internal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

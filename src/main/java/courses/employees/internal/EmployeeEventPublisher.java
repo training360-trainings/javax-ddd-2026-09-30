@@ -1,5 +1,6 @@
-package courses.employees;
+package courses.employees.internal;
 
+import courses.employees.EmployeeHasLeft;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package courses;
 
 import courses.employees.EmployeeDto;
-import courses.employees.EmployeeService;
+import courses.employees.internal.EmployeeService;
 import courses.enrollments.application.inboundport.AnnounceCommand;
 import courses.enrollments.application.inboundport.CourseApplicationServicePort;
 import courses.enrollments.application.inboundport.CourseQueryServicePort;

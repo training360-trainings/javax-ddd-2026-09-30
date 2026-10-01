@@ -1,5 +1,6 @@
 package courses.enrollments.application;
 
+import courses.employees.internal.EmployeeService;
 import courses.enrollments.adapter.repository.CourseRepository;
 import courses.enrollments.application.inboundport.CourseDto;
 import courses.enrollments.application.inboundport.CourseQueryServicePort;

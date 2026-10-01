@@ -1,5 +1,7 @@
 package courses.employees;
 
+import courses.employees.internal.Employee;
+
 import java.io.Serializable;
 
 /**
