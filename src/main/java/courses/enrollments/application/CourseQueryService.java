@@ -3,6 +3,7 @@ package courses.enrollments.application;
 import courses.enrollments.adapter.repository.CourseRepository;
 import courses.enrollments.application.inboundport.CourseDto;
 import courses.enrollments.application.inboundport.CourseQueryServicePort;
+import courses.enrollments.application.inboundport.EnrollmentDto;
 import courses.enrollments.application.outboundport.CourseRepositoryPort;
 import courses.enrollments.domain.enrollments.Course;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,10 @@ public class CourseQueryService implements CourseQueryServicePort {
     public CourseDto findById(long id) {
         return courseRepository.findDtoById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No course found with id " + id));
+    }
+
+    @Override
+    public List<EnrollmentDto> findAllEnrollmentsForCourse(long id) {
+        return courseRepository.findAllEnrollmentsForCourse(id);
     }
 }

@@ -8,6 +8,7 @@ import courses.enrollments.domain.enrollments.CourseCode;
 import courses.enrollments.domain.enrollments.EmployeeId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +37,15 @@ public class CourseApplicationService implements CourseApplicationServicePort {
         var enrollment = course.enroll(id);
         courseRepository.save(course);
         return new EnrollmentDto(enrollment.employeeId().value(), enrollment.enrollmentDate());
+    }
+
+    @Override
+    @Transactional
+    public void cancelAllForEmployee(long employeeId) {
+        var courses = courseRepository.findAllWithEnrolledEmployee(employeeId);
+        for (var course : courses) {
+            course.cancelFor(employeeId);
+            courseRepository.save(course);
+        }
     }
 }

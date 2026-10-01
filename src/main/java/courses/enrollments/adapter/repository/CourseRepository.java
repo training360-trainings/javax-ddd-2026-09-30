@@ -1,6 +1,7 @@
 package courses.enrollments.adapter.repository;
 
 import courses.enrollments.application.inboundport.CourseDto;
+import courses.enrollments.application.inboundport.EnrollmentDto;
 import courses.enrollments.application.outboundport.CourseRepositoryPort;
 import courses.enrollments.domain.enrollments.Course;
 import courses.enrollments.domain.enrollments.CourseCode;
@@ -56,5 +57,16 @@ public class CourseRepository implements CourseRepositoryPort {
     @Override
     public Optional<CourseDto> findDtoById(long id) {
         return courseJpaRepository.findDtoById(CourseDto.class, id);
+    }
+
+    @Override
+    public List<Course> findAllWithEnrolledEmployee(long employeeId) {
+        return courseJpaRepository.findAllWithEnrolledEmployee(employeeId)
+                .stream().map(this::convert).toList();
+    }
+
+    @Override
+    public List<EnrollmentDto> findAllEnrollmentsForCourse(long courseId) {
+        return courseJpaRepository.findAllEnrollmentsForCourse(courseId);
     }
 }

@@ -12,6 +12,8 @@ public class EmployeeService implements EmployeeHostGateway {
 
     private final EmployeeRepository employeeRepository;
 
+    private final EmployeeEventPublisher employeeEventPublisher;
+
     public EmployeeDto join(EmployeeDto employee) {
         var entity = new  Employee(null, employee.name());
         entity = employeeRepository.save(entity);
@@ -30,5 +32,10 @@ public class EmployeeService implements EmployeeHostGateway {
     @Override
     public boolean hasJoined(long employeeId) {
         return employeeRepository.existsById(employeeId);
+    }
+
+    public void leave(long employeeId) {
+        employeeRepository.deleteById(employeeId);
+        employeeEventPublisher.employeeHasLeft(employeeId);
     }
 }

@@ -1,6 +1,7 @@
 package courses.employees;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,5 +26,11 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public EmployeeDto findById(@PathVariable long id) {
         return employeeService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void leave(@PathVariable long id) {
+        employeeService.leave(id);
     }
 }

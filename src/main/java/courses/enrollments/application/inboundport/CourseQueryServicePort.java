@@ -7,4 +7,6 @@ public interface CourseQueryServicePort {
     List<CourseDto> findAll();
 
     CourseDto findById(long id);
+
+    List<EnrollmentDto> findAllEnrollmentsForCourse(long id);
 }
