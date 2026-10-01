@@ -3,11 +3,10 @@ package courses.enrollments.adapter.gateway;
 import courses.employees.EmployeeHostGateway;
 import courses.enrollments.application.outboundport.EmployeeGatewayPort;
 import courses.enrollments.domain.enrollments.EmployeeId;
-import jakarta.persistence.Column;
+import infra.Gateway;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
+@Gateway
 @RequiredArgsConstructor
 public class EmployeesGateway implements EmployeeGatewayPort {
 
