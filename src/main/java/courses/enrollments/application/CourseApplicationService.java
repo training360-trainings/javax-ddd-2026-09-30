@@ -43,8 +43,9 @@ public class CourseApplicationService implements CourseApplicationServicePort {
     @Transactional
     public void cancelAllForEmployee(long employeeId) {
         var courses = courseRepository.findAllWithEnrolledEmployee(employeeId);
+        var cancelAll = new CancelAllDomainService(courses);
+        cancelAll.cancelAll(new EmployeeId(employeeId));
         for (var course : courses) {
-            course.cancelFor(employeeId);
             courseRepository.save(course);
         }
     }

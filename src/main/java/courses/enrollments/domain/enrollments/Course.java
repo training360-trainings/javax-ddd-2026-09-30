@@ -47,7 +47,7 @@ public class Course {
         return enrollment;
     }
 
-    public void cancelFor(long employeeId) {
-        enrollments.removeIf(e -> e.employeeId().value() == employeeId);
+    public void cancelFor(EmployeeId employeeId) {
+        enrollments.removeIf(e -> e.employeeId().equals(employeeId));
     }
 }
