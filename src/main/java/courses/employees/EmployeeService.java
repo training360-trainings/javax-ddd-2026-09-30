@@ -1,0 +1,29 @@
+package courses.employees;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeDto join(EmployeeDto employee) {
+        var entity = new  Employee(null, employee.name());
+        entity = employeeRepository.save(entity);
+        return new EmployeeDto(entity.getId(), entity.getName());
+    }
+
+    public List<EmployeeDto> findAllBy() {
+        return employeeRepository.findAllBy(EmployeeDto.class);
+    }
+
+    public EmployeeDto findById(long id) {
+        return employeeRepository.findDtoById(id, EmployeeDto.class)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found with id " + id));
+    }
+}
