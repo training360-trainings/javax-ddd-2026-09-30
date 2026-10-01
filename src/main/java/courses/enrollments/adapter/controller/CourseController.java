@@ -6,12 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
 public class CourseController {
 
     private final CourseApplicationServicePort service;
+
+    private final CourseQueryServicePort queryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -26,5 +30,15 @@ public class CourseController {
                     formatted(courseId, enrollCommand.courseId()));
         }
         return service.enroll(enrollCommand);
+    }
+
+    @GetMapping
+    public List<CourseDto> findAll() {
+        return queryService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public CourseDto findById(@PathVariable long id) {
+        return queryService.findById(id);
     }
 }

@@ -1,5 +1,6 @@
 package courses.enrollments.adapter.repository;
 
+import courses.enrollments.application.inboundport.CourseDto;
 import courses.enrollments.application.outboundport.CourseRepositoryPort;
 import courses.enrollments.domain.enrollments.Course;
 import courses.enrollments.domain.enrollments.CourseCode;
@@ -10,6 +11,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -46,4 +48,13 @@ public class CourseRepository implements CourseRepositoryPort {
         return domain;
     }
 
+    @Override
+    public List<CourseDto> findAll() {
+        return courseJpaRepository.findAllBy(CourseDto.class);
+    }
+
+    @Override
+    public Optional<CourseDto> findDtoById(long id) {
+        return courseJpaRepository.findDtoById(CourseDto.class, id);
+    }
 }
